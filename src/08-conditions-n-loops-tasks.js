@@ -200,8 +200,18 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let outputString = '';
+  if (isStartIncluded) outputString += '[';
+  else outputString += '(';
+
+  if (a <= b) outputString += `${a}, ${b}`;
+  else outputString += `${b}, ${a}`;
+
+  if (isEndIncluded) outputString += ']';
+  else outputString += ')';
+
+  return outputString;
 }
 
 
@@ -217,8 +227,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -234,8 +244,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return num.toString().split('').reverse().join('');
 }
 
 
@@ -259,10 +269,20 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
-}
+function isCreditCardNumber(ccn) {
+  const ccnString = ccn.toString();
+  let sum = Number(ccnString[ccnString.length - 1]);
+  const numberOfDigits = ccnString.length;
+  const parity = numberOfDigits % 2;
 
+  for (let i = 0; i < numberOfDigits - 1; i += 1) {
+    let digit = Number(ccnString[i]);
+    if (i % 2 === parity) digit *= 2;
+    if (digit > 9) digit -= 9;
+    sum += digit;
+  }
+  return sum % 10 === 0;
+}
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -277,8 +297,14 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  if (num <= 9) return num;
+  let sum = 0;
+  const arr = num.toString().split('');
+  arr.forEach((element) => {
+    sum += Number(element);
+  });
+  return getDigitalRoot(sum);
 }
 
 
@@ -303,8 +329,49 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  function isOpening(character, bracketsConfig) {
+    for (let i = 0; i < bracketsConfig.length; i += 1) {
+      if (character === bracketsConfig[i][0]) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function isClosing(character, bracketsConfig, lastStackElement) {
+    for (let i = 0; i < bracketsConfig.length; i += 1) {
+      if (character === bracketsConfig[i][1]) {
+        if (lastStackElement === bracketsConfig[i][0]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  const bracketsConfig = [['[', ']'], ['(', ')'], ['{', '}'], ['<', '>']];
+  const inputCharacters = str.split('');
+  const stack = [];
+  let currentCharacter = '';
+  let stackTopCharacter = '';
+
+  for (let i = 0; i < inputCharacters.length; i += 1) {
+    currentCharacter = inputCharacters[i];
+    stackTopCharacter = stack[stack.length - 1];
+
+    if (isOpening(currentCharacter, bracketsConfig)) {
+      if (isClosing(currentCharacter, bracketsConfig, stackTopCharacter)) {
+        stack.pop();
+      } else {
+        stack.push(currentCharacter);
+      }
+    } else if (isClosing(currentCharacter, bracketsConfig, stackTopCharacter)) {
+      stack.pop();
+    } else {
+      return false;
+    }
+  }
+  if (stack.length === 0) return true;
+  return false;
 }
 
 
@@ -368,8 +435,19 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const arr = [];
+  for (let x = 0; x < m1.length; x += 1) {
+    arr[x] = [];
+    for (let y = 0; y < m2[0].length; y += 1) {
+      let sum = 0;
+      for (let z = 0; z < m1[0].length; z += 1) {
+        sum += m1[x][z] * m2[z][y];
+      }
+      arr[x][y] = sum;
+    }
+  }
+  return arr;
 }
 
 
