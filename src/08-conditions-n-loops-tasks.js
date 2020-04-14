@@ -85,8 +85,8 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return a + b > c && a + c > b && b + c > a;
 }
 
 
@@ -153,8 +153,9 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const squareDistance = (circle.center.x - point.x) ** 2 + (circle.center.y - point.y) ** 2;
+  return squareDistance < circle.radius ** 2;
 }
 
 
@@ -395,8 +396,17 @@ function isBracketsBalanced(str) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let rem;
+  const result = [];
+  let temp = num;
+  do {
+    rem = temp % n;
+    temp = Math.floor(temp / n);
+    result.push(rem);
+  } while (temp > 1);
+  result.push(temp);
+  return result.reverse().join('').replace(/^0+/, '');
 }
 
 
