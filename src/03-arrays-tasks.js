@@ -35,8 +35,9 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  const arr = new Array(len).fill(1);
+  return arr.map((a, index) => a + 2 * index);
 }
 
 
@@ -234,8 +235,13 @@ function toArrayOfSquares(arr) {
  *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
-function getMovingSum(/* arr */) {
-  throw new Error('Not implemented');
+function getMovingSum(arr) {
+  let sum = 0;
+  function changeValue(item) {
+    sum += item;
+    return sum;
+  }
+  return arr.map(changeValue);
 }
 
 /**
@@ -268,10 +274,17 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
-}
+function propagateItemsByPositionIndex(arr) {
+  let result = [];
+  function populateItem(value, index) {
+    const len = index + 1;
+    const tmpArr = new Array(len).fill(value);
+    result = result.concat(tmpArr);
+  }
+  arr.map((a, index) => populateItem(a, index));
 
+  return result;
+}
 
 /**
  * Returns the 3 largest numbers from the specified array
@@ -538,10 +551,21 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const result = new Map();
+  function groupBy(previousItem, currentItem) {
+    const key = keySelector(currentItem);
+    const value = valueSelector(currentItem);
+    if (!result.get(key)) {
+      result.set(key, []);
+    }
+    const tempValue = result.get(key);
+    tempValue.push(value);
+    result.set(key, tempValue);
+    return result;
+  }
+  return array.reduce(groupBy, {});
 }
-
 
 /**
  * Projects each element of the specified array to a sequence
@@ -556,8 +580,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.map(childrenSelector).flat();
 }
 
 
