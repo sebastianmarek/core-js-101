@@ -122,8 +122,14 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  if (rect1.left < rect2.left + rect2.width
+    && rect1.left + rect1.width > rect2.left
+    && rect1.top < rect2.top + rect2.height
+    && rect1.top + rect1.height > rect2.top) {
+    return true;
+  }
+  return false;
 }
 
 
@@ -422,10 +428,24 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let lastSlashIndex;
+  let isEqual = true;
+  for (let i = 0; i < pathes[0].length; i += 1) {
+    for (let y = 1; y < pathes.length; y += 1) {
+      if (pathes[y - 1][i] !== pathes[y][i]) {
+        isEqual = false;
+        break;
+      }
+    }
+    if (!isEqual) break;
+    if (pathes[0][i] === '/') {
+      lastSlashIndex = i;
+    }
+  }
+  if (lastSlashIndex === undefined) return '';
+  return pathes[0].substr(0, lastSlashIndex + 1);
 }
-
 
 /**
  * Returns the product of two specified matrixes.
@@ -491,8 +511,29 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  for (let i = 0; i < 3; i += 1) {
+    if ((position[i][0] === 'X' || position[i][0] === '0')
+      && position[i][0] === position[i][1] && position[i][1] === position[i][2]) {
+      return position[i][0];
+    }
+  }
+  for (let i = 0; i < 3; i += 1) {
+    if ((position[0][i] === 'X' || position[0][i] === '0')
+      && position[0][i] === position[1][i] && position[1][i] === position[2][i]) {
+      return position[0][i];
+    }
+  }
+
+  if ((position[0][0] === 'X' || position[0][0] === '0')
+  && position[0][0] === position[1][1] && position[1][1] === position[2][2]) {
+    return position[0][0];
+  }
+  if ((position[2][0] === 'X' || position[2][0] === '0')
+  && position[2][0] === position[1][1] && position[1][1] === position[0][2]) {
+    return position[2][0];
+  }
+  return undefined;
 }
 
 
